@@ -728,12 +728,28 @@ document.addEventListener('keydown', e => {
       if (!mus) return;
       mus.volume = 0.45;
 
-      // Försök autoplay direkt; om blockerat, starta vid första interaktion
-      function tryPlay() { mus.play().catch(() => {}); }
-      tryPlay();
-      ['click','keydown','touchstart'].forEach(ev =>
-        document.addEventListener(ev, tryPlay, { once: true })
-      );
+      // Skapa musikknapp
+      const muteBtn = document.createElement('button');
+      muteBtn.textContent = '🔇';
+      muteBtn.title = 'Sätt på musik';
+      muteBtn.style.cssText = 'position:fixed;bottom:18px;right:18px;font-size:22px;background:rgba(255,255,255,0.25);border:none;border-radius:50%;width:44px;height:44px;cursor:pointer;z-index:999;backdrop-filter:blur(4px);';
+      document.body.appendChild(muteBtn);
+
+      let playing = false;
+      muteBtn.addEventListener('click', () => {
+        if (!playing) {
+          mus.play().then(() => {
+            playing = true;
+            muteBtn.textContent = '🎵';
+            muteBtn.title = 'Stäng av musik';
+          }).catch(() => {});
+        } else {
+          mus.pause();
+          playing = false;
+          muteBtn.textContent = '🔇';
+          muteBtn.title = 'Sätt på musik';
+        }
+      });
     })();
   </script>
 </body>
