@@ -1653,6 +1653,7 @@
         state.over = true;
         state.won = true;
         if (bgMusicEl) bgMusicEl.pause();
+        if (typeof gtag === 'function') gtag('event', 'level_complete', { level_name: LEVELS[state.levelIndex].name, level_index: state.levelIndex });
         const isLast = state.levelIndex === LEVELS.length - 1;
         // Unlock next level
         if (!isLast) {
@@ -1675,6 +1676,7 @@
       state.lives = 0;
       state.over = true;
       if (bgMusicEl) bgMusicEl.pause();
+      if (typeof gtag === 'function') gtag('event', 'level_fail', { level_name: LEVELS[state.levelIndex].name, level_index: state.levelIndex, wave_reached: state.wave });
       showOverlay('Spelet är slut 🐾', 'Du lämnade för många hundar hungriga.', {});
     }
 
@@ -2127,6 +2129,7 @@
   function loadLevel(idx) {
     state.levelIndex = idx;
     const lvl = LEVELS[idx];
+    if (typeof gtag === 'function') gtag('event', 'level_start', { level_name: lvl.name, level_index: idx });
     currentPath = lvl.path;
     loadPath(lvl.path);
     state.hpMult = lvl.hpMult;
